@@ -1,137 +1,111 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Игра: Безопасность в интернете</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f3f3f3;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .game-container {
-            text-align: center;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 600px;
-        }
-        .question {
-            font-size: 1.2em;
-            margin-bottom: 20px;
-        }
-        .answers {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        button {
-            padding: 10px 15px;
-            font-size: 1em;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            background-color: #007BFF;
-            color: white;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .result {
-            margin-top: 20px;
-            font-size: 1.2em;
-        }
-    </style>
-</head>
-<body>
-    <div class="game-container">
-        <div id="game">
-            <div class="question" id="question">Вопрос появится здесь</div>
-            <div class="answers" id="answers"></div>
-        </div>
-        <div id="result" class="result" style="display: none;"></div>
+import { useState } from 'react';
+import { Button } from "/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "/components/ui/card";
+
+const questions = [
+  {
+    id: 1,
+    question: 'Что такое пароль?',
+    options: ['Секретное слово', 'Открытый ключ', 'Адрес электронной почты', 'Имя пользователя'],
+    answer: 'Секретное слово'
+  },
+  {
+    id: 2,
+    question: 'Зачем нужен антивирус?',
+    options: ['Для защиты от хакеров', 'Для ускорения компьютера', 'Для удаления мусора', 'Для защиты от вирусов'],
+    answer: 'Для защиты от вирусов'
+  },
+  {
+    id: 3,
+    question: 'Что такое фишинг?',
+    options: ['Вид спама', 'Вид вируса', 'Вид атаки', 'Вид кражи'],
+    answer: 'Вид атаки'
+  },
+  {
+    id: 4,
+    question: 'Как защитить свой пароль?',
+    options: ['Использовать один и тот же пароль для всех сайтов', 'Использовать разные пароли для разных сайтов', 'Хранить пароль в открытом виде', 'Отдавать пароль друзьям'],
+    answer: 'Использовать разные пароли для разных сайтов'
+  },
+  {
+    id: 5,
+    question: 'Что такое двухфакторная аутентификация?',
+    options: ['Вид пароля', 'Вид атаки', 'Вид защиты', 'Вид аутентификации'],
+    answer: 'Вид аутентификации'
+  },
+  {
+    id: 6,
+    question: 'Зачем нужен брандмауэр?',
+    options: ['Для защиты от хакеров', 'Для ускорения компьютера', 'Для удаления мусора', 'Для защиты от вирусов'],
+    answer: 'Для защиты от хакеров'
+  },
+  {
+    id: 7,
+    question: 'Что такое спам?',
+    options: ['Вид рекламы', 'Вид вируса', 'Вид атаки', 'Вид мусора'],
+    answer: 'Вид рекламы'
+  },
+  {
+    id: 8,
+    question: 'Как защитить свой компьютер от вирусов?',
+    options: ['Использовать антивирус', 'Использовать брандмауэр', 'Использовать пароль', 'Использовать спам-фильтр'],
+    answer: 'Использовать антивирус'
+  },
+  {
+    id: 9,
+    question: 'Что такое кража личных данных?',
+    options: ['Вид атаки', 'Вид вируса', 'Вид спама', 'Вид кражи'],
+    answer: 'Вид кражи'
+  },
+  {
+    id: 10,
+    question: 'Зачем нужен спам-фильтр?',
+    options: ['Для защиты от хакеров', 'Для ускорения компьютера', 'Для удаления мусора', 'Для защиты от спама'],
+    answer: 'Для защиты от спама'
+  }
+];
+
+const App = () => {
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [score, setScore] = useState(0);
+
+  const handleAnswer = (answer) => {
+    if (answer === questions[currentQuestion].answer) {
+      setScore(score + 1);
+    }
+    setCurrentQuestion(currentQuestion + 1);
+  };
+
+  return (
+    <div className="max-w-md mx-auto p-4">
+      <Card>
+        <CardHeader>
+          <CardTitle>Безопасность в интернете</CardTitle>
+          <CardDescription>Тест из 10 вопросов</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {currentQuestion < questions.length ? (
+            <div>
+              <p className="text-lg font-bold">{questions[currentQuestion].question}</p>
+              <div className="flex flex-col space-y-2">
+                {questions[currentQuestion].options.map((option) => (
+                  <Button key={option} onClick={() => handleAnswer(option)}>{option}</Button>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div>
+              <p className="text-lg font-bold">Тест завершен!</p>
+              <p className="text-sm text-gray-600">Ваш результат: {score} из {questions.length}</p>
+            </div>
+          )}
+        </CardContent>
+        <CardFooter>
+          <p className="text-sm text-gray-600">Вопрос {currentQuestion + 1} из {questions.length}</p>
+        </CardFooter>
+      </Card>
     </div>
+  );
+};
 
-    <script>
-        const questions = [
-            {
-                question: "Какой пароль считается безопасным?",
-                answers: [
-                    "123456",
-                    "Qwerty123",
-                    "Длинный пароль с символами, цифрами и буквами",
-                    "Пароль от Wi-Fi соседа"
-                ],
-                correct: 2
-            },
-            {
-                question: "Что делать, если вы получили подозрительное письмо с вложением?",
-                answers: [
-                    "Открыть его сразу",
-                    "Удалить, не открывая",
-                    "Отправить друзьям для проверки",
-                    "Скачать вложение и проверить позже"
-                ],
-                correct: 1
-            },
-            {
-                question: "Какой способ защиты данных наиболее эффективен?",
-                answers: [
-                    "Не использовать интернет",
-                    "Регулярно обновлять пароли и использовать антивирус",
-                    "Хранить пароли в текстовом файле на рабочем столе",
-                    "Доверять всем сайтам без разбора"
-                ],
-                correct: 1
-            }
-        ];
-
-        let currentQuestion = 0;
-        let score = 0;
-
-        const questionEl = document.getElementById("question");
-        const answersEl = document.getElementById("answers");
-        const resultEl = document.getElementById("result");
-
-        function loadQuestion() {
-            const q = questions[currentQuestion];
-            questionEl.textContent = q.question;
-            answersEl.innerHTML = "";
-            q.answers.forEach((answer, index) => {
-                const button = document.createElement("button");
-                button.textContent = answer;
-                button.onclick = () => checkAnswer(index);
-                answersEl.appendChild(button);
-            });
-        }
-
-        function checkAnswer(index) {
-            if (index === questions[currentQuestion].correct) {
-                score++;
-            }
-            currentQuestion++;
-            if (currentQuestion < questions.length) {
-                loadQuestion();
-            } else {
-                showResult();
-            }
-        }
-
-        function showResult() {
-            document.getElementById("game").style.display = "none";
-            resultEl.style.display = "block";
-            resultEl.textContent = `Вы ответили правильно на ${score} из ${questions.length} вопросов.`;
-        }
-
-        loadQuestion();
-    </script>
-</body>
-</html>
+export default App;
